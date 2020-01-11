@@ -1,5 +1,4 @@
 buildscript {
-
     repositories {
         mavenCentral()
         maven {
@@ -48,7 +47,7 @@ jooq {
             }
             generate {}
             target {
-                packageName = 'spawn.mason.server.sql'
+                packageName = 'test.sql'
             }
         }
     }
