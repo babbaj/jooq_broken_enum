@@ -25,7 +25,7 @@ repositories {
 jooq {
     version = '3.12.3'
     edition = 'OSS'
-    obsidian(sourceSets.main) {
+    test(sourceSets.main) {
         generator {
             name = 'org.jooq.codegen.JavaGenerator'
             strategy {
