@@ -1,0 +1,67 @@
+buildscript {
+
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath("nu.studer:gradle-jooq-plugin:4.0")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'nu.studer.jooq'
+
+group 'spawn.masons'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+jooq {
+    version = '3.12.3'
+    edition = 'OSS'
+    obsidian(sourceSets.main) {
+        generator {
+            name = 'org.jooq.codegen.JavaGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                //name = 'org.jooq.meta.postgres.PostgresDatabase'
+                name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
+
+                properties {
+                    property {
+                        key = 'scripts'
+                        value = 'src/main/resources/db/*'
+                    }
+                }
+
+                inputSchema = 'PUBLIC'
+                outputSchemaToDefault = true
+            }
+            generate {}
+            target {
+                packageName = 'spawn.mason.server.sql'
+            }
+        }
+    }
+}
+
+dependencies {
+    // Driver
+    compile 'org.postgresql:postgresql:42.2.9.jre7'
+    jooqRuntime 'org.postgresql:postgresql:42.2.9.jre7'
+    jooqRuntime group: 'org.jooq', name: 'jooq-meta-extensions'
+
+    // jOOQ
+    compile group: 'org.jooq', name: 'jooq'
+    compile group: 'org.jooq', name: 'jooq-meta'
+    compile group: 'org.jooq', name: 'jooq-codegen'
+}
